@@ -13,7 +13,7 @@ from .baseinvocation import (BaseInvocation, InputField, InvocationContext,
 
 @invocation(
     'gridToImageCollection', 
-    title="grid to Image Collection", 
+    title="Grid to Image Collection", 
     version="1.0.0"
     )
 class GridToImageCollectionInvocation(BaseInvocation):
@@ -69,14 +69,13 @@ class ImageCollectionToGif(BaseInvocation):
     gif_out_path: str = InputField(default='', description="Absolute path and filename of output gif")
     fps: int = InputField(default=4, ge=4, le=60, description="Number of frames per second to play the gif back at (4-60)")
     loop_gif: bool = InputField(default=True, description="Should the gif loop")
-    open_gif: bool = InputField(default=False, description="Open the Gif in your system's default image viewer")
     
     def invoke(self, context: InvocationContext) -> ImageCollectionOutput:
         imageFieldArray = self.collection
         saveDir = os.path.dirname(self.gif_out_path)
         filename = os.path.basename(self.gif_out_path)
 
-        defaultName = r"gridToGif.gif"
+        defaultName = r"GridToGif.gif"
         fileExtension = r".gif"
 
         if not len(re.findall(r'\S+\.' + re.escape(fileExtension), filename, re.IGNORECASE)) > 0:
@@ -105,11 +104,6 @@ class ImageCollectionToGif(BaseInvocation):
             not self.loop_gif,
             gifSavePath
         )
-
-        if self.open_gif:
-            newGif = Image.open(saveDir + filename)
-            print("Open?")
-            newGif.show()
         
         return ImageCollectionOutput(collection=self.collection)
         
@@ -123,7 +117,6 @@ class imageUtils(object):
 
         imagegrids = []
 
-        #forward move
         for j in range(dimY):
             for i in range(dimX):
                 xrange1 = int(i*spacX)
