@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "version": "1.0.0"
+  },
+  "name": "Grid to Gif Example",
+  "author": "MildMisery",
+  "description": "Example of how to use the Grid to Gif nodes",
+  "notes": "",
+  "tags": "grid, xy, animation, gif",
+  "contact": "",
+  "version": "1.0.0",
+  "exposedFields": [],
+  "nodes": [
+    {
+      "id": "8098db85-f0da-460a-99bf-e45b80c58d0e",
+      "type": "invocation",
+      "data": {
+        "id": "8098db85-f0da-460a-99bf-e45b80c58d0e",
+        "type": "ImageCollectionToGif",
+        "inputs": {
+          "collection": {
+            "id": "91edb288-19d2-4ffc-ae7e-12b73466ab0f",
+            "name": "collection",
+            "type": "ImageCollection",
+            "fieldKind": "input",
+            "label": "",
+            "value": []
+          },
+          "gif_out_path": {
+            "id": "35a2e6a5-52cc-4624-bf06-b374d0ac32af",
+            "name": "gif_out_path",
+            "type": "string",
+            "fieldKind": "input",
+            "label": "",
+            "value": ""
+          },
+          "fps": {
+            "id": "914c157e-c112-425a-ac2d-a812c84cb44c",
+            "name": "fps",
+            "type": "integer",
+            "fieldKind": "input",
+            "label": "",
+            "value": 4
+          },
+          "loop_gif": {
+            "id": "c2e2f11c-4923-4a95-b9c4-caeac253b9ad",
+            "name": "loop_gif",
+            "type": "boolean",
+            "fieldKind": "input",
+            "label": "",
+            "value": true
+          }
+        },
+        "outputs": {
+          "collection": {
+            "id": "ad1e10b5-1ac0-4b0d-9174-b58c3dff83ba",
+            "name": "collection",
+            "type": "ImageCollection",
+            "fieldKind": "output"
+          }
+        },
+        "label": "",
+        "isOpen": true,
+        "notes": "",
+        "embedWorkflow": false,
+        "isIntermediate": true,
+        "version": "1.0.0"
+      },
+      "width": 320,
+      "height": 299,
+      "position": {
+        "x": 2000,
+        "y": -1450
+      }
+    },
+    {
+      "id": "c6b11e77-d9c6-45ce-a370-659f26030e27",
+      "type": "invocation",
+      "data": {
+        "id": "c6b11e77-d9c6-45ce-a370-659f26030e27",
+        "type": "gridToImageCollection",
+        "inputs": {
+          "image": {
+            "id": "a58e3554-7029-452b-914a-2f459dac8735",
+            "name": "image",
+            "type": "ImageField",
+            "fieldKind": "input",
+            "label": ""
+          },
+          "dimX": {
+            "id": "a279ac9f-0da5-4976-81b1-34c149091799",
+            "name": "dimX",
+            "type": "integer",
+            "fieldKind": "input",
+            "label": "",
+            "value": 2
+          },
+          "dimY": {
+            "id": "2c957040-8a4e-4c26-b29a-f7297911635c",
+            "name": "dimY",
+            "type": "integer",
+            "fieldKind": "input",
+            "label": "",
+            "value": 2
+          }
+        },
+        "outputs": {
+          "collection": {
+            "id": "b0bb4d63-9eff-4a4a-a3f9-2f4f9dd50dcd",
+            "name": "collection",
+            "type": "ImageCollection",
+            "fieldKind": "output"
+          }
+        },
+        "label": "",
+        "isOpen": true,
+        "notes": "",
+        "embedWorkflow": false,
+        "isIntermediate": true,
+        "version": "1.0.0"
+      },
+      "width": 320,
+      "height": 275,
+      "position": {
+        "x": 1600,
+        "y": -1425
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "c6b11e77-d9c6-45ce-a370-659f26030e27",
+      "sourceHandle": "collection",
+      "target": "8098db85-f0da-460a-99bf-e45b80c58d0e",
+      "targetHandle": "collection",
+      "id": "reactflow__edge-c6b11e77-d9c6-45ce-a370-659f26030e27collection-8098db85-f0da-460a-99bf-e45b80c58d0ecollection",
+      "type": "default"
+    }
+  ]
+}
