@@ -12,33 +12,33 @@ from .baseinvocation import (BaseInvocation, InputField, InvocationContext,
 
 
 @invocation(
-    'tileToImageCollection', 
-    title="Tile to Image Collection", 
+    'gridToImageCollection', 
+    title="grid to Image Collection", 
     version="1.0.0"
     )
-class TileToImageCollectionInvocation(BaseInvocation):
-    '''Crops an image by tile dimension and converts them to a gif'''
+class GridToImageCollectionInvocation(BaseInvocation):
+    '''Crops an image by grid dimension and produces an Image Collection of the generated images'''
     
     #Inputs
-    image: ImageField = InputField(description="The input tiled image")
-    dimX: int = InputField(default=2, ge=2, le=256, description="X dimension of tile (how many horizontal tiles)")
-    dimY: int = InputField(default=2, ge=2, le=256, description="Y dimension of tile (how many vertical tiles)")
+    image: ImageField = InputField(description="The input grid image")
+    dimX: int = InputField(default=2, ge=2, le=256, description="X dimension of grid (how many horizontal images)")
+    dimY: int = InputField(default=2, ge=2, le=256, description="Y dimension of grid (how many vertical images)")
     
     def invoke(self, context: InvocationContext) -> ImageCollectionOutput:
         # Load the image using InvokeAI's predefined Image Service. Returns the PIL image.
-        tiledImage = context.services.images.get_pil_image(self.image.image_name)
+        gridImage = context.services.images.get_pil_image(self.image.image_name)
         
-        imageTiles = imageUtils.tileToArray(
-            tiledImage, 
+        imagegrids = imageUtils.gridToArray(
+            gridImage, 
             self.dimX, 
             self.dimY,
         )
         
         # Save the image using InvokeAI's predefined Image Service. Returns the prepared PIL image.
         imageCollection = []
-        for i in range(len(imageTiles)):
+        for i in range(len(imagegrids)):
             image_dto = context.services.images.create(
-                image=imageTiles[i],
+                image=imagegrids[i],
                 image_origin=ResourceOrigin.INTERNAL,
                 image_category=ImageCategory.OTHER,
                 node_id=self.id,
@@ -76,7 +76,7 @@ class ImageCollectionToGif(BaseInvocation):
         saveDir = os.path.dirname(self.gif_out_path)
         filename = os.path.basename(self.gif_out_path)
 
-        defaultName = r"TileToGif.gif"
+        defaultName = r"gridToGif.gif"
         fileExtension = r".gif"
 
         if not len(re.findall(r'\S+\.' + re.escape(fileExtension), filename, re.IGNORECASE)) > 0:
@@ -115,13 +115,13 @@ class ImageCollectionToGif(BaseInvocation):
         
         
 class imageUtils(object):
-    def tileToArray(tiledImage, dimX, dimY):
-        w, h = tiledImage.size
+    def gridToArray(gridImage, dimX, dimY):
+        w, h = gridImage.size
 
         spacY = h / dimY
         spacX = w / dimX
 
-        imageTiles = []
+        imagegrids = []
 
         #forward move
         for j in range(dimY):
@@ -130,13 +130,13 @@ class imageUtils(object):
                 xrange2 = int((i+1)*(spacX))
                 yrange1 = int(j*spacY)
                 yrange2 = int((j+1)*(spacY))
-                crop_img = tiledImage.crop((xrange1,yrange1,xrange2,yrange2))
+                crop_img = gridImage.crop((xrange1,yrange1,xrange2,yrange2))
                 #if saveIndividuals:
                 #    curImageName = str(j) + 'x' + str(i) + '.png'
                 #    crop_img.save(os.path.join(saveDir, curImageName), 'png')
-                imageTiles.append(crop_img)
-        return imageTiles
+                imagegrids.append(crop_img)
+        return imagegrids
         
-    def createGif(imageTiles, framerate, loopIterations, savePath):
+    def createGif(imagegrids, framerate, loopIterations, savePath):
         durationInMs = int(1000 * 1/framerate);
-        imageTiles[0].save(fp=savePath, format='GIF', append_images=imageTiles[1:], save_all=True, duration=durationInMs, loop=loopIterations)
+        imagegrids[0].save(fp=savePath, format='GIF', append_images=imagegrids[1:], save_all=True, duration=durationInMs, loop=loopIterations)
